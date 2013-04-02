@@ -50,55 +50,49 @@ class Entry(Document):
         return '<Entry %s>' % self['name']
 
 connection.register([Entry])
-collection = connection['test'].entries
+collection = connection['squeak'].entries
+
 
 @app.route('/')
 def index():
     entries = list(collection.Entry.find())
     return render_template('index.html', saved_entries=entries)
 
+
 @app.route('/save', methods=['POST'])
 def save_entry():
-    name = request.form['name']
-    url = request.form['url']
-    phone_number = request.form['phone_number']
-    address = request.form['address']
-    categories = request.form.getlist('categories')
-
     new_entry = collection.Entry()
-    new_entry.name = name
-    new_entry.url = url
-    new_entry.phone_number = phone_number
-    new_entry.address = address
-    new_entry.categories = categories
+    new_entry.name = request.form['name']
+    new_entry.url = request.form['url']
+    new_entry.phone_number = request.form['phone_number']
+    new_entry.address = request.form['address']
+    new_entry.categories = request.form.getlist('categories')
     new_entry.save()
 
     return redirect(url_for('index'))
+
 
 @app.route('/results', methods=['POST'])
 def yelp_search():
     search_term = request.form['term']
     location = request.form['location']
+
     data = {
         'term': search_term,
         'location': location
     }
-    print '=' * 80
-    print location
-    print '=' * 80
     query_string = urllib.urlencode(data)
     api_url = '%s?%s' % (app.config['YELP_SEARCH_URL'], query_string)
-    signed_url = setup_oauth_url(api_url)
+    signed_url = create_oauth_url(api_url)
     response = requests.get(signed_url)
     json_response = json.loads(response.text)
-    print json_response
     return render_template('results.html',
                             search_term=search_term,
                             location=location,
                             businesses=json_response['businesses'])
 
 
-def setup_oauth_url(url):
+def create_oauth_url(url):
     consumer = oauth.Consumer(app.config['OAUTH_CONSUMER_KEY'],
                                app.config['OAUTH_CONSUMER_SECRET'])
     token = oauth.Token(app.config['OAUTH_TOKEN'],
