@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ search_term }} - {{ location }}</h2>
+<ul>
+{% for business in businesses %}
+<li>
+    <div>
+        <h4><a href="{{ business['url'] }}">{{ business['name'] }}</a></h4>
+        {% for category in business['categories'] %}
+        {{ category[0] }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+        <br />
+        {{ business['location']['display_address']|join(', ') }} <br />
+        {{ business['display_phone'] }} <br />
+        <img src="{{ business['rating_img_url'] }}" alt="{{ business['rating'] }}">
+    </div>
+</li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('index') }}">back</a>
+{% endblock %}

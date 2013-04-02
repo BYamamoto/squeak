@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Squeak</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div class="page">
+            <h1>Squeak</h1>
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
+
