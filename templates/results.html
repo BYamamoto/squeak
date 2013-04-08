@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>{{ search_term }} - {{ location }}</h2>
-<ul>
+<ul class='entries'>
 {% for business in businesses %}
 <li>
     <div>

@@ -1,23 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
+<h2>Search</h2>
 <form action="{{ url_for('yelp_search') }}" method="POST" class="search-box">
-    <input type="text" size="50" placeholder="Restaurants" name="term">
-    <input type="text" size="30" placeholder="Claremont" name="location">
+    <input type="text" size="30" placeholder="Restaurants" name="term">
+    <input type="text" size="20" placeholder="Claremont" name="location">
     <input type="submit" value="Search">
 </form>
 
 <h2>Saved</h2>
+<ul class='entries'>
 {% for business in saved_entries %}
 <li>
     <div>
-        <h4><a href="{{ business['url'] }}">{{ business['name'] }}</a></h4>
-        {{ business['categories']|join(', ') }} <br />
+        <h4 class='entry-title'><a href="{{ business['url'] }}">{{ business['name'] }}</a></h4>
+        <p class='entry-info'>{{ business['categories']|join(', ') }} <br />
         {{ business['address'] }} <br />
-        {{ business['phone_number'] }} <br />
+        {{ business['phone_number'] }} <br /></p>
     </div>
 </li>
 {% else %}
 <p>You haven't saved anything yet.</p>
 {% endfor %}
+</ul>
 
 {% endblock %}
