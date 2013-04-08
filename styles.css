@@ -45,3 +45,7 @@ input[type=text] {
     margin-top: 0; 
 }
 
+#logo {
+   font-family: Geneva, sans-serif; 
+   font-size: 48px;
+}
