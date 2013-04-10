@@ -8,7 +8,7 @@ from flask import (
 )
 from mongokit import Connection, Document, ObjectId
 import datetime
-import oauth2 as oauth
+from oauth import sign_url
 import json
 import requests
 import urllib
@@ -19,10 +19,6 @@ MONGODB_PORT = 27017
 DEBUG = True
 SECRET_KEY = 'development key'
 
-OAUTH_CONSUMER_KEY = ''
-OAUTH_CONSUMER_SECRET = ''
-OAUTH_TOKEN = ''
-OAUTH_TOKEN_SECRET = ''
 YELP_SEARCH_URL = 'http://api.yelp.com/v2/search'
 
 app = Flask(__name__)
@@ -83,7 +79,7 @@ def yelp_search():
     }
     query_string = urllib.urlencode(data)
     api_url = '%s?%s' % (app.config['YELP_SEARCH_URL'], query_string)
-    signed_url = create_oauth_url(api_url)
+    signed_url = sign_url(api_url)
     response = requests.get(signed_url)
     json_response = json.loads(response.text)
     return render_template('results.html',
